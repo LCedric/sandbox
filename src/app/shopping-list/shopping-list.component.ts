@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { Ingredient } from '../shared/Ingredient.model';
 import { ShoppingEditComponent } from './shopping-edit/shopping-edit.component';
 
 @Component({
@@ -9,4 +10,9 @@ import { ShoppingEditComponent } from './shopping-edit/shopping-edit.component';
   styleUrl: './shopping-list.component.scss',
   imports: [CommonModule, ShoppingEditComponent],
 })
-export class ShoppingListComponent {}
+export class ShoppingListComponent {
+  ingredients: Ingredient[] = [
+    { name: 'Apple', amount: 5 },
+    { name: 'Tomatoes', amount: 10 },
+  ];
+}
