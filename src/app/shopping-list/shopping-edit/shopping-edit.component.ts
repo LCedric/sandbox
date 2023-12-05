@@ -1,12 +1,6 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Output,
-  ViewChild,
-} from '@angular/core';
-import { Ingredient } from '../../shared/Ingredient.model';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ShoppingListService } from '../shopping-list.service';
 
 @Component({
   selector: 'app-shopping-edit',
@@ -18,7 +12,8 @@ import { Ingredient } from '../../shared/Ingredient.model';
 export class ShoppingEditComponent {
   @ViewChild('nameInput', { static: false }) nameInputRef!: ElementRef;
   @ViewChild('amountInput', { static: false }) amountInputRef!: ElementRef;
-  @Output() ingredientAdded = new EventEmitter<Ingredient>();
+
+  constructor(private shoppinglistService: ShoppingListService) {}
 
   onAddItem($event: Event) {
     $event.preventDefault();
@@ -26,6 +21,7 @@ export class ShoppingEditComponent {
       name: this.nameInputRef.nativeElement.value,
       amount: this.amountInputRef.nativeElement.value,
     };
-    this.ingredientAdded.emit(newIngredient);
+
+    this.shoppinglistService.addIngredient(newIngredient);
   }
 }

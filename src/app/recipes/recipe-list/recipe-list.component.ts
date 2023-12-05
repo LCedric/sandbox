@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { Recipe } from '../models/recipe.model';
+import { RecipeService } from '../recipe.service';
 import { RecipeItemComponent } from './recipe-item/recipe-item.component';
 
 @Component({
@@ -10,18 +11,12 @@ import { RecipeItemComponent } from './recipe-item/recipe-item.component';
   styleUrl: './recipe-list.component.scss',
   imports: [CommonModule, RecipeItemComponent],
 })
-export class RecipeListComponent {
-  @Output() recipeWasSelected = new EventEmitter<Recipe>();
-  recipes: Recipe[] = [
-    {
-      name: 'A Test Recipe',
-      description: 'This is a test',
-      imagePath:
-        'https://upload.wikimedia.org/wikipedia/commons/3/39/Recipe.jpg?20170213105318',
-    },
-  ];
+export class RecipeListComponent implements OnInit {
+  recipes = signal<Recipe[]>([]);
 
-  onRecipeSelected(recipe: Recipe) {
-    this.recipeWasSelected.emit(recipe);
+  constructor(private recipeService: RecipeService) {}
+
+  ngOnInit() {
+    this.recipes.set(this.recipeService.getRecipes());
   }
 }

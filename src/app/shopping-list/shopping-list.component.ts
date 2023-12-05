@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Ingredient } from '../shared/Ingredient.model';
 import { ShoppingEditComponent } from './shopping-edit/shopping-edit.component';
+import { ShoppingListService } from './shopping-list.service';
 
 @Component({
   selector: 'app-shopping-list',
@@ -10,13 +12,27 @@ import { ShoppingEditComponent } from './shopping-edit/shopping-edit.component';
   styleUrl: './shopping-list.component.scss',
   imports: [CommonModule, ShoppingEditComponent],
 })
-export class ShoppingListComponent {
-  ingredients: Ingredient[] = [
-    { name: 'Apple', amount: 5 },
-    { name: 'Tomatoes', amount: 10 },
-  ];
+export class ShoppingListComponent implements OnInit, OnDestroy {
+  private ingredientChangedSubscription!: Subscription;
+
+  ingredients = signal<Ingredient[]>([]);
+
+  constructor(private shoppingListService: ShoppingListService) {}
+
+  ngOnInit() {
+    this.ingredients.set(this.shoppingListService.getIngredients());
+
+    this.ingredientChangedSubscription =
+      this.shoppingListService.ingredientsChanged.subscribe(ingredients => {
+        this.ingredients.set(ingredients);
+      });
+  }
 
   onIngredientAdded(ingredient: Ingredient) {
-    this.ingredients.push(ingredient);
+    this.shoppingListService.addIngredient(ingredient);
+  }
+
+  ngOnDestroy(): void {
+    this.ingredientChangedSubscription.unsubscribe();
   }
 }
