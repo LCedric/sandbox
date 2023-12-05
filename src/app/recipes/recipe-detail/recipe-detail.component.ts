@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Recipe } from '../models/recipe.model';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -8,4 +9,6 @@ import { Component } from '@angular/core';
   templateUrl: './recipe-detail.component.html',
   styleUrl: './recipe-detail.component.scss',
 })
-export class RecipeDetailComponent {}
+export class RecipeDetailComponent {
+  @Input({ required: true }) recipe!: Recipe;
+}

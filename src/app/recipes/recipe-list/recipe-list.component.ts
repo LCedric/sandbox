@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Recipe } from '../models/recipe.model';
 import { RecipeItemComponent } from './recipe-item/recipe-item.component';
 
@@ -11,6 +11,7 @@ import { RecipeItemComponent } from './recipe-item/recipe-item.component';
   imports: [CommonModule, RecipeItemComponent],
 })
 export class RecipeListComponent {
+  @Output() recipeWasSelected = new EventEmitter<Recipe>();
   recipes: Recipe[] = [
     {
       name: 'A Test Recipe',
@@ -20,5 +21,7 @@ export class RecipeListComponent {
     },
   ];
 
-  constructor() {}
+  onRecipeSelected(recipe: Recipe) {
+    this.recipeWasSelected.emit(recipe);
+  }
 }
