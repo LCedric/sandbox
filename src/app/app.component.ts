@@ -18,4 +18,10 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
     ShoppingListComponent,
   ],
 })
-export class AppComponent {}
+export class AppComponent {
+  loadedFeature = 'recipe';
+
+  onNavigate(feature: string) {
+    this.loadedFeature = feature;
+  }
+}
